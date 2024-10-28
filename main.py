@@ -6,12 +6,10 @@ import curve_analysis
 
 
 def main():
-    # picture = "img/default.jpg"
+    picture = "img/without_shadow_CUT.jpg"
     # img = cv2.imread(picture, cv2.IMREAD_GRAYSCALE)
 
-    # img = cv2.imread("img/default.jpg")
-    img = cv2.imread("img/magic_CUT.jpg")
-    # img = cv2.imread("img/without_shadow.jpg")
+    img = cv2.imread(picture)
     img_height, img_width, img_channels = img.shape
 
     # median blur
@@ -71,18 +69,18 @@ def main():
 
     # show coordinates and scale
     print(f'Coordinates of line: {line1}')
-    small_rectangle_length, axis_variants = rectangle.find_small_scale("img/magic_CUT.jpg")
+    small_rectangle_length, axis_variants = rectangle.find_small_scale(picture)
     big_rectangle_length = 5 * small_rectangle_length
     print(f'Scale: 1 second is {big_rectangle_length} px')
 
     # find main axis
-    point_axis = max(item[1] for item in line2)
+    point_axis = max(item[1] for item in line1)
     ind = 0
     while axis_variants[ind] < point_axis:
         ind += 1
 
     # show main axis
-    real_axis = axis_variants[ind] - 1
+    real_axis = axis_variants[ind]
     cv2.line(result, (0, real_axis), (img_width, real_axis), (255, 0, 0), 2)
 
     # show points of ecg line
