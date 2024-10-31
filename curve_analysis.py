@@ -38,8 +38,13 @@ def find_neighbour_minimums(maximums, category_count, current_categories, potent
 
     for i in range(1, len(potential_neighbour_minimums)):
         if potential_neighbour_minimums[i][0] > category_maximums[ind][0] and \
-                potential_neighbour_minimums[i][1] != category_maximums[ind][0]:
-            neighbour_minimums.append(potential_neighbour_minimums[i - 1])
+                potential_neighbour_minimums[i][1] != category_maximums[ind][1]:
+
+            k = 1
+            while potential_neighbour_minimums[i - k][1] == category_maximums[ind][1]:
+                k += 1
+
+            neighbour_minimums.append(potential_neighbour_minimums[i - k])
             neighbour_minimums.append(potential_neighbour_minimums[i])
             ind += 1
 

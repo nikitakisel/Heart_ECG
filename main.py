@@ -51,7 +51,7 @@ def main():
     establish_points = curve_analysis.find_neighbour_minimums(maximums, 3, [0, 2], potential_establish_points)
 
     for item in establish_points:
-        cv2.circle(result, (item[0], item[1]), radius=2, color=(0, 120, 255), thickness=-1)
+        cv2.circle(result, (item[0], item[1]), radius=3, color=(0, 120, 255), thickness=-1)
 
     # show minimums and maximums
     minimum_letters = ['Q', 'S']
