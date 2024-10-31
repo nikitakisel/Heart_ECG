@@ -39,17 +39,19 @@ def main():
         cv2.circle(result, (item[0], item[1]), radius=1, color=(255, 0, 0), thickness=-1)
 
     # find minimums and maximums
-    minimums, maximums = curve_analysis.find_extremes(upper_contour)
+    # minimums, maximums = curve_analysis.find_extremes(upper_contour)
 
     # DANGEROUS PART!!!
     _, maximums = curve_analysis.find_extremes(upper_contour)
     potential_minimums, _ = curve_analysis.find_extremes(lower_contour)
-    minimums = []
+    minimums = curve_analysis.find_neighbour_minimums(maximums, 3, [1], potential_minimums)
 
-    for i in range(1, len(maximums), 3):
-        for minimum in potential_minimums:
-            if abs(maximums[i][0] - minimum[0]) <= small_rectangle_length:
-                minimums.append(minimum)
+    # find and draw establish points
+    potential_establish_points = curve_analysis.find_establish_points(upper_contour, small_rectangle_length)
+    establish_points = curve_analysis.find_neighbour_minimums(maximums, 3, [0, 2], potential_establish_points)
+
+    for item in establish_points:
+        cv2.circle(result, (item[0], item[1]), radius=2, color=(0, 120, 255), thickness=-1)
 
     # show minimums and maximums
     minimum_letters = ['Q', 'S']
