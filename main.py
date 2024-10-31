@@ -5,6 +5,7 @@ import math
 import find_contours
 import rectangle
 import curve_analysis
+import curve_calculation
 
 
 def main():
@@ -15,14 +16,15 @@ def main():
     img_height, img_width, img_channels = img.shape
     result = img.copy()
 
-    upper_contour, _ = find_contours.find_contours("img/magic_CUT.jpg", 29)
-    _, lower_contour = find_contours.find_contours("img/magic_CUT.jpg", 11)
+    upper_contour, _ = find_contours.find_contours(picture, 29)
+    _, lower_contour = find_contours.find_contours(picture, 11)
 
     # show coordinates and scale
     print(f'Coordinates of line: {upper_contour}')
     small_rectangle_length, axis_variants = rectangle.find_small_scale(picture)
-    big_rectangle_length = 5 * small_rectangle_length
-    print(f'Scale: 1 second is {big_rectangle_length} px')
+    real_scale = 25 * small_rectangle_length
+    print(f'Scale: 1 second is {real_scale} px')
+    print("")
 
     # find main axis
     point_axis = max(item[1] for item in upper_contour)
@@ -48,7 +50,10 @@ def main():
 
     # find and draw establish points
     potential_establish_points = curve_analysis.find_establish_points(upper_contour, small_rectangle_length)
-    establish_points = curve_analysis.find_neighbour_minimums(maximums, 3, [0, 2], potential_establish_points)
+    establish_points = \
+        curve_analysis.find_neighbour_minimums(maximums, 3, [0, 2], potential_establish_points) + \
+        curve_analysis.find_neighbour_maximums(minimums, 5, potential_establish_points)
+    establish_points.sort()
 
     for item in establish_points:
         cv2.circle(result, (item[0], item[1]), radius=3, color=(0, 120, 255), thickness=-1)
@@ -68,6 +73,9 @@ def main():
         x, y = maximums[i][0], maximums[i][1]
         cv2.circle(result, (x, y), radius=3, color=(44, 211, 15), thickness=-1)
         cv2.putText(result, maximum_letters[i % 3], (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (44, 211, 15), 2)
+
+    # print parameters calculation
+    curve_calculation.print_parameters(maximums, establish_points, real_scale)
 
     # show window
     cv2.namedWindow('Electric cardiogram of heart', cv2.WINDOW_NORMAL)
