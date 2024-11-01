@@ -48,6 +48,10 @@ def draw_layout(img, maximums, establish_points, small_rectangle_length):
         draw_upper_layout(img, establish_points[6 * i + 3][0], establish_points[6 * i + 4][0],
                           establish_points[6 * i + 3][1], small_rectangle_length * 3, "Seg ST")
 
+    r_maximums = [maximums[i] for i in range(len(maximums)) if i % 3 == 1]
+    for i in range(1, len(r_maximums)):
+        draw_upper_layout(img, r_maximums[i - 1][0], r_maximums[i][0], r_maximums[i][1], (i + 1) * 20, f"Interval R{i}R{i + 1}")
+
 
 def print_parameters(maximums, establish_points, scale):
     for i in range(len(establish_points) // 6):

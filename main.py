@@ -9,12 +9,13 @@ import curve_calculation
 
 
 def main():
-    picture = "img/magic_CUT.jpg"
+    picture = "img/magic_CUT_new.jpg"
+    show_picture = "img/default_CUT_new.jpg"
     # img = cv2.imread(picture, cv2.IMREAD_GRAYSCALE)
 
     img = cv2.imread(picture)
     img_height, img_width, img_channels = img.shape
-    result = img.copy()
+    result = cv2.imread(show_picture)
 
     upper_contour, _ = find_contours.find_contours(picture, 29)
     _, lower_contour = find_contours.find_contours(picture, 11)
