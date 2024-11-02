@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
-import math
 import rectangle
 import curve_analysis
+
+__all__ = []
 
 
 def main():
@@ -10,7 +11,7 @@ def main():
     # img = cv2.imread(picture, cv2.IMREAD_GRAYSCALE)
 
     # img = cv2.imread("img/default.jpg")
-    img = cv2.imread("img/magic_CUT.jpg")
+    img = cv2.imread('img/magic_CUT.jpg')
     # img = cv2.imread("img/without_shadow.jpg")
     img_height, img_width, img_channels = img.shape
 
@@ -30,7 +31,11 @@ def main():
     morph = cv2.morphologyEx(morph, cv2.MORPH_CLOSE, kernel)
 
     # filter contours on area
-    contours = cv2.findContours(morph, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours = cv2.findContours(
+        morph,
+        cv2.RETR_EXTERNAL,
+        cv2.CHAIN_APPROX_SIMPLE,
+    )
     contours = contours[0] if len(contours) == 2 else contours[1]
     result = img.copy()
     line1 = []
@@ -66,12 +71,14 @@ def main():
             end_line.reverse()
 
             line1 = start_line + end_line
-            line2 = prom[start:j + 1]
+            line2 = prom[start : j + 1]
             # cv2.drawContours(result, [contours[i]], -1, (0, 0, 255), 2)
 
     # show coordinates and scale
     print(f'Coordinates of line: {line1}')
-    small_rectangle_length, axis_variants = rectangle.find_small_scale("img/magic_CUT.jpg")
+    small_rectangle_length, axis_variants = rectangle.find_small_scale(
+        'img/magic_CUT.jpg',
+    )
     big_rectangle_length = 5 * small_rectangle_length
     print(f'Scale: 1 second is {big_rectangle_length} px')
 
@@ -87,7 +94,13 @@ def main():
 
     # show points of ecg line
     for item in line1:
-        cv2.circle(result, (item[0], item[1]), radius=1, color=(255, 0, 0), thickness=-1)
+        cv2.circle(
+            result,
+            (item[0], item[1]),
+            radius=1,
+            color=(255, 0, 0),
+            thickness=-1,
+        )
 
     # show minimums and maximums
     minimums, maximums = curve_analysis.find_extremes(line1)
@@ -97,12 +110,28 @@ def main():
     for i in range(len(minimums)):
         x, y = minimums[i][0], minimums[i][1]
         cv2.circle(result, (x, y), radius=3, color=(0, 0, 255), thickness=-1)
-        cv2.putText(result, minimum_letters[i % 3], (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        cv2.putText(
+            result,
+            minimum_letters[i % 3],
+            (x, y - 10),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (0, 0, 255),
+            2,
+        )
 
     for i in range(len(maximums)):
         x, y = maximums[i][0], maximums[i][1]
         cv2.circle(result, (x, y), radius=3, color=(44, 211, 15), thickness=-1)
-        cv2.putText(result, maximum_letters[i % 3], (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (44, 211, 15), 2)
+        cv2.putText(
+            result,
+            maximum_letters[i % 3],
+            (x, y - 10),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.7,
+            (44, 211, 15),
+            2,
+        )
 
     # show window
     cv2.namedWindow('Electric cardiogram of heart', cv2.WINDOW_NORMAL)

@@ -1,21 +1,28 @@
 import cv2
-import numpy as np
+
+__all__ = []
 
 
 def find_small_scale(image_path):
     # Read the input image
     input_image = cv2.imread(image_path)
-    original_image = input_image.copy()
 
     # Convert image to grayscale
     grayscale_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY)
 
     # Convert to binary image
-    _, binary_image = cv2.threshold(grayscale_image, 150, 255, cv2.THRESH_BINARY)
+    _, binary_image = cv2.threshold(
+        grayscale_image,
+        150,
+        255,
+        cv2.THRESH_BINARY,
+    )
 
     # Find all the contours
     all_contours, hierarchy = cv2.findContours(
-        binary_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE
+        binary_image,
+        cv2.RETR_LIST,
+        cv2.CHAIN_APPROX_SIMPLE,
     )
 
     # Find mode
