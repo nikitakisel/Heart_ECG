@@ -1,6 +1,19 @@
 version: '3.9'
 
 services:
+  db:
+    image: postgres:15
+    platform: linux/amd64
+    volumes:
+      - ./postgres:/docker-entrypoint-initdb.d
+      - heart-database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=$DATABASE_USER
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - POSTGRES_DB=$DATABASE_DB
+    user: postgres
+    restart: always
+
   backend:
     build:
       context: ./backend/
@@ -9,6 +22,8 @@ services:
       - 8000:8000
     volumes:
       - ./backend:/app
+    depends_on:
+      - db
 
   frontend:
     build:
@@ -21,3 +36,7 @@ services:
       - 3000
     ports:
       - 3000:3000
+
+volumes:
+  heart-database:
+    external: true

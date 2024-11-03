@@ -1,12 +1,28 @@
+import os
 from pathlib import Path
+
+from environ import Env
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'asdafasdasd'
+env = Env(
+    ALLOWED_HOSTS=(list, ['*']),
+    DATABASE_DB=(str, 'postgres'),
+    DATABASE_HOST=(str, 'localhost'),
+    DATABASE_PASSWORD=(str, 'dummy-password'),
+    DATABASE_PORT=(int, 5432),
+    DATABASE_USER=(str, 'postgres'),
+    DEBUG=(bool, False),
+    SECRET_KEY=(str, 'dummy-key'),
+)
 
-DEBUG = True
+Env.read_env(os.path.join(BASE_DIR.parent, '.env'))
 
-ALLOWED_HOSTS = []
+SECRET_KEY = env('ALLOWED_HOSTS')
+
+DEBUG = env('DEBUG')
+
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -47,11 +63,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'main.wsgi.application'
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
+        'NAME': env('DATABASE_DB'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
     },
 }
 
