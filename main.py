@@ -24,7 +24,7 @@ def main():
     print(f'Coordinates of line: {upper_contour}')
     small_rectangle_length, axis_variants = rectangle.find_small_scale(picture)
     real_scale = 25 * small_rectangle_length
-    print(f'Scale: 1 second is {real_scale} px')
+    print(f'Scale: 1 second is {real_scale} px\n')
 
     # find main axis
     point_axis = max(item[1] for item in upper_contour)

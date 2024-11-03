@@ -223,7 +223,7 @@ def print_parameters(maximums, establish_points, scale):
             / scale,
             3,
         )
-        print(f'Interval QT: {interval_qt} seconds')
+        print(f'Interval QT: {interval_qt} seconds\n')
 
     r_maximums = [maximums[i] for i in range(len(maximums)) if i % 3 == 1]
     print('Intervals RR:')
