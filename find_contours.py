@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-import math
+
+__all__ = []
 
 
 def find_contours(picture, kernel_limit):
@@ -18,14 +19,20 @@ def find_contours(picture, kernel_limit):
     # apply morphology open and close
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
     morph = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_limit, kernel_limit))
+    kernel = cv2.getStructuringElement(
+        cv2.MORPH_RECT,
+        (kernel_limit, kernel_limit),
+    )
     morph = cv2.morphologyEx(morph, cv2.MORPH_CLOSE, kernel)
 
     # filter contours on area
-    contours = cv2.findContours(morph, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours = cv2.findContours(
+        morph,
+        cv2.RETR_EXTERNAL,
+        cv2.CHAIN_APPROX_SIMPLE,
+    )
     contours = contours[0] if len(contours) == 2 else contours[1]
 
-    result = img.copy()
     line1 = []
     line2 = []
 
@@ -59,7 +66,7 @@ def find_contours(picture, kernel_limit):
             end_line.reverse()
 
             line1 = start_line + end_line
-            line2 = prom[start:j + 1]
+            line2 = prom[start : j + 1]
             # cv2.drawContours(result, [contours[i]], -1, (0, 0, 255), 2)
 
     # cv2.namedWindow('Electric cardiogram of heart', cv2.WINDOW_NORMAL)
