@@ -213,7 +213,7 @@ def print_parameters(maximums, establish_points, scale):
         )
         print(f'Interval PQ: {interval_pq} seconds')
         qrs = round(
-            (establish_points[6 * i + 3][0] - establish_points[6 * i + 2][0],)
+            (establish_points[6 * i + 3][0] - establish_points[6 * i + 2][0])
             / scale,
             3,
         )
