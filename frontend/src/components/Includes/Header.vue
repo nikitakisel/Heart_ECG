@@ -5,16 +5,13 @@
     </a>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">Features</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">Pricing</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">FAQs</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
+      <li><a href="/" class="nav-link px-2 link-dark">Начать анализ</a></li>
+      <li><a href="/analysis" class="nav-link px-2 link-dark">Список анализов</a></li>
     </ul>
 
     <div class="col-md-3 text-end">
-      <button @click="goLogin" type="button" class="btn btn-outline-danger me-2">Login</button>
-      <button @click="goRegister" type="button" class="btn btn-danger">Sign-up</button>
+      <button @click="goLogin" type="button" class="btn btn-outline-danger me-2">Войти</button>
+      <button @click="goRegister" type="button" class="btn btn-danger">Создать аккаунт</button>
     </div>
   </header>
 </template>
