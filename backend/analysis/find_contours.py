@@ -4,8 +4,8 @@ import numpy as np
 __all__ = []
 
 
-def find_contours(picture, kernel_limit):
-    img = cv2.imread(picture)
+def find_contours(image_file, kernel_limit):
+    img = image_file
 
     # median blur
     median = cv2.medianBlur(img, 5)
@@ -67,12 +67,5 @@ def find_contours(picture, kernel_limit):
 
             line1 = start_line + end_line
             line2 = prom[start : j + 1]
-            # cv2.drawContours(result, [contours[i]], -1, (0, 0, 255), 2)
-
-    # cv2.namedWindow('Electric cardiogram of heart', cv2.WINDOW_NORMAL)
-    # cv2.imshow('Electric cardiogram of heart', result)
-
-    # if cv2.waitKey(0) & 0xFF == ord('q'):
-    #     cv2.destroyAllWindows()
 
     return line1, line2

@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     # custom apps
-    'main',
+    'analysis.apps.AnalysisConfig',
     'user.apps.UserConfig',
 ]
 
@@ -179,3 +179,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.User'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
