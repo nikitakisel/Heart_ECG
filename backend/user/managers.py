@@ -7,7 +7,7 @@ class UserProfileManager(BaseUserManager):
             return self.get(email__iexact=value)
         return self.get(username__iexact=value)
 
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, email, password=None, **extra_fields):
         if not username:
             raise ValueError('The username field must be set')
         user = self.model(username=username, **extra_fields)

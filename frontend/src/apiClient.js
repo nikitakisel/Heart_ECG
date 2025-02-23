@@ -4,16 +4,6 @@ const apiClient = axios.create({
   baseURL: 'http://localhost:8000/api/',
 });
 
-apiClient.interceptors.request.use(config => {
-  const tokens = JSON.parse(localStorage.getItem('tokens'));
-  if (tokens && tokens.access) {
-    config.headers['Authorization'] = `Bearer ${tokens.access}`;
-  }
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
-
 apiClient.interceptors.response.use(response => {
   return response;
 }, async error => {
@@ -41,7 +31,6 @@ apiClient.interceptors.response.use(response => {
       }
     }
   }
-
   return Promise.reject(error);
 });
 
