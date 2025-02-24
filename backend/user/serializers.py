@@ -36,14 +36,3 @@ class RegisterSerializer(serializers.ModelSerializer):
             'subdivision',
             'role',
         )
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            User.last_name.field.name,
-            User.first_name.field.name,
-            User.patronymic.field.name,
-            User.email.field.name,
-        )
