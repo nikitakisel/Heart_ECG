@@ -34,6 +34,13 @@ body {
     color: inherit;
     text-indent: 8px;
     height: 42px;
+    transition: 0.3s;
+}
+
+.auth-container form .form-control:focus {
+    background-color: rgb(255, 242, 244);
+    border-bottom: 1px solid rgb(244,71,107);
+    transition: 0.3s;
 }
 
 .button-login {
@@ -46,7 +53,8 @@ body {
     border-radius: 4px;
     padding: 11px;
     box-shadow: none;
-    margin-top: 26px;
+    margin-top: 20px;
+    margin-bottom: 10px;
     text-shadow: none;
     outline: none !important;
 }
@@ -66,4 +74,9 @@ body {
     color: #6f7a85;
     opacity: 0.9;
     text-decoration: none;
+}
+
+.show-password-btn {
+    border: none;
+    background-color: #f7f9fc;
 }
