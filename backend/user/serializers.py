@@ -17,6 +17,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    institution = serializers.CharField(required=False, allow_null=True)
+    subdivision = serializers.CharField(required=False, allow_null=True)
+    role = serializers.CharField(required=False, allow_null=True)
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -28,4 +31,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             User.patronymic.field.name,
             User.email.field.name,
             User.password.field.name,
+            User.is_staff.field.name,
+            'institution',
+            'subdivision',
+            'role',
         )

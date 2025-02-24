@@ -8,12 +8,23 @@
       <div class="form-group">
         <input class="form-control" type="email" v-model="formData.username" placeholder="Электронная почта " required/>
       </div>
-      <div class="form-group">
-        <input class="form-control" v-model="formData.password" type="password" placeholder="Пароль" required>
+      <div class="password-container" style="display: flex; flex-direction: row;">
+        <input 
+          class="form-control" 
+          v-model="formData.password" 
+          :type="showPassword ? 'text' : 'password'" 
+          placeholder="Пароль" 
+          required
+        />
+        <button type="button" @click="togglePasswordVisibility" class="show-password-btn">
+          <img v-if="showPassword" src="../../assets/icons/auth/eye.png" width="20px" height="20px">
+          <img v-else src="../../assets/icons/auth/eye_closed.png" width="20px" height="20px">
+        </button>
       </div>
       <div class="form-group">
         <button type="submit" class="button-login btn btn-danger">Войти</button>
       </div>
+      <p>Нет аккаунта? <a href="/register" style="color: #0089ff;">Зарегистрироваться</a></p>
     </form>
   </div>
 </template>
@@ -29,7 +40,7 @@ export default {
           username: null,
           password: null,
         },
-        show_password: null,
+        showPassword: false,
       }
   },
   components: {
@@ -53,11 +64,19 @@ export default {
       .catch(error => {
         alert("Ошибка ввода данных");
       });
+    },
+
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
     }
   }
 }
-</script>
+</script scoped>
 
 <style>
 @import '../../assets/styles/auth.css';
+
+.form-group {
+  padding-bottom: 10px;
+}
 </style>

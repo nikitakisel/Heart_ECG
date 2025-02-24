@@ -4,11 +4,11 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView
-from user.views import RegisterView
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.views import TokenVerifyView
 
 from analysis.views import AnalysisViewSet
+from user.views import RegisterView
 
 router = SimpleRouter()
 
