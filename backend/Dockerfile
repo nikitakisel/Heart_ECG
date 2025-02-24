@@ -12,6 +12,9 @@ RUN python -m pip install --upgrade pip && \
     pip install pip-tools && \
     pip install -r requirements.txt
 
+
 COPY . .
 
-CMD ["bash", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+RUN python manage.py collectstatic --noinput
+
+CMD ["bash", "-c", "gunicorn main.wsgi:application --bind 0.0.0.0:8000"]
