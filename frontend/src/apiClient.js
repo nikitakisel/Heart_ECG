@@ -4,6 +4,17 @@ const apiClient = axios.create({
   baseURL: 'http://localhost:8000/api/',
 });
 
+apiClient.interceptors.request.use(config => {
+  const tokens = JSON.parse(localStorage.getItem('tokens'));
+  console.log(tokens)
+  if (tokens && tokens.access) {
+    config.headers['Authorization'] = `Bearer ${tokens.access}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
 apiClient.interceptors.response.use(response => {
   return response;
 }, async error => {
@@ -25,13 +36,14 @@ apiClient.interceptors.response.use(response => {
         localStorage.setItem('tokens', JSON.stringify(newTokens));
 
         originalRequest.headers['Authorization'] = `Bearer ${newTokens.access}`;
-        return apiClient(originalRequest); // Повторяем запрос с новым токеном
+        return apiClient(originalRequest);
       } catch (refreshError) {
         console.error('Unable to refresh token:', refreshError);
         this.$router.push('/login');
       }
     }
   }
+
   return Promise.reject(error);
 });
 
