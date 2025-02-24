@@ -73,8 +73,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         ContentType,
         on_delete=models.SET_NULL,
         null=True,
+        blank=True,
     )
-    profile_id = models.PositiveIntegerField(null=True)
+    profile_id = models.PositiveIntegerField(null=True, blank=True)
     profile = GenericForeignKey('profile_type', 'profile_id')
 
     USERNAME_FIELD = 'username'
