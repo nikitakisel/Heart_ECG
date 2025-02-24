@@ -9,7 +9,7 @@ apiClient.interceptors.response.use(response => {
 }, async error => {
   const originalRequest = error.config;
 
-  if (error.response.status === 401) {
+  if (error.response && error.response.status === 401) {
     const tokens = JSON.parse(localStorage.getItem('tokens'));
 
     if (tokens && tokens.refresh) {
@@ -25,9 +25,10 @@ apiClient.interceptors.response.use(response => {
         localStorage.setItem('tokens', JSON.stringify(newTokens));
 
         originalRequest.headers['Authorization'] = `Bearer ${newTokens.access}`;
-        return apiClient(originalRequest);
+        return apiClient(originalRequest); // Повторяем запрос с новым токеном
       } catch (refreshError) {
         console.error('Unable to refresh token:', refreshError);
+        this.$router.push('/login');
       }
     }
   }

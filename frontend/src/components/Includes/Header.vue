@@ -5,6 +5,11 @@
       <p></p>
     </a>
 
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+      <li><a href="/" class="nav-link px-2 link-dark">Начать анализ</a></li>
+      <li><a href="/analysis" class="nav-link px-2 link-dark">Список анализов</a></li>
+    </ul>
+
     <div class="col-md-3 text-end">
       <button v-if="!isLoggedIn" @click="goLogin" type="button" class="btn btn-outline-danger me-2">Войти</button>
       <button v-if="!isLoggedIn" @click="goRegister" type="button" class="btn btn-danger">Зарегистрироваться</button>

@@ -1,21 +1,20 @@
 import cv2
+import numpy as np
 
-import find_contours
-import rectangle
-import curve_analysis
-import curve_calculation
-
-__all__ = []
+from analysis import find_contours
+from analysis import rectangle
+from analysis import curve_analysis
+from analysis import curve_calculation
 
 
-def main():
-    picture = 'img/magic_CUT_new.jpg'
-    show_picture = 'img/default_CUT_new.jpg'
-    # img = cv2.imread(picture, cv2.IMREAD_GRAYSCALE)
+def analyse(image_file):
+    picture = cv2.imdecode(
+        np.frombuffer(image_file.read(), np.uint8),
+        cv2.IMREAD_COLOR,
+    )
 
-    img = cv2.imread(picture)
-    img_height, img_width, img_channels = img.shape
-    result = cv2.imread(show_picture)
+    img_height, img_width, img_channels = picture.shape
+    result = picture.copy()
 
     upper_contour, _ = find_contours.find_contours(picture, 29)
     _, lower_contour = find_contours.find_contours(picture, 11)
@@ -24,7 +23,7 @@ def main():
     print(f'Coordinates of line: {upper_contour}')
     small_rectangle_length, axis_variants = rectangle.find_small_scale(picture)
     real_scale = 25 * small_rectangle_length
-    print(f'Scale: 1 second is {real_scale} px')
+    print(f'Scale: 1 second is {real_scale} px\n')
 
     # find main axis
     point_axis = max(item[1] for item in upper_contour)
@@ -46,10 +45,6 @@ def main():
             thickness=-1,
         )
 
-    # find minimums and maximums
-    # minimums, maximums = curve_analysis.find_extremes(upper_contour)
-
-    # DANGEROUS PART!!!
     _, maximums = curve_analysis.find_extremes(upper_contour)
     potential_minimums, _ = curve_analysis.find_extremes(lower_contour)
     minimums = curve_analysis.find_neighbour_minimums(
@@ -124,16 +119,5 @@ def main():
             2,
         )
 
-    # print parameters calculation
-    curve_calculation.print_parameters(maximums, establish_points, real_scale)
-
-    # show window
-    cv2.namedWindow('Electric cardiogram of heart', cv2.WINDOW_NORMAL)
-    cv2.imshow('Electric cardiogram of heart', result)
-
-    if cv2.waitKey(0) & 0xFF == ord('q'):
-        cv2.destroyAllWindows()
-
-
-if __name__ == '__main__':
-    main()
+    is_success, buffer = cv2.imencode(".png", result)
+    return buffer.tobytes()
