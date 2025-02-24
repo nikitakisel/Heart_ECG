@@ -7,12 +7,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.views import TokenVerifyView
 
-from analysis.views import AnalysisViewSet
+from analysis.views import ECGAnalysisViewSet
 from user.views import RegisterView
 
 router = SimpleRouter()
 
-router.register(r'analysis', AnalysisViewSet, basename='analysis')
+router.register(r'analysis', ECGAnalysisViewSet, basename='analysis')
 
 api_namespace = router.urls
 api_namespace += [
