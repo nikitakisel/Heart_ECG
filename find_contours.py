@@ -67,12 +67,12 @@ def find_contours(picture, kernel_limit):
 
             line1 = start_line + end_line
             line2 = prom[start : j + 1]
-            # cv2.drawContours(result, [contours[i]], -1, (0, 0, 255), 2)
+            cv2.drawContours(img, [contours[i]], -1, (0, 0, 255), 2)
 
-    # cv2.namedWindow('Electric cardiogram of heart', cv2.WINDOW_NORMAL)
-    # cv2.imshow('Electric cardiogram of heart', result)
+    cv2.namedWindow('Electric cardiogram of heart', cv2.WINDOW_NORMAL)
+    cv2.imshow('Electric cardiogram of heart', img)
 
-    # if cv2.waitKey(0) & 0xFF == ord('q'):
-    #     cv2.destroyAllWindows()
+    if cv2.waitKey(0) & 0xFF == ord('q'):
+        cv2.destroyAllWindows()
 
     return line1, line2

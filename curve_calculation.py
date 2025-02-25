@@ -233,3 +233,31 @@ def print_parameters(maximums, establish_points, scale):
             f'{round((r_maximums[i][0] - r_maximums[i - 1][0]) / scale, 3)}'
             f' seconds',
         )
+
+
+def find_corner(x, y):
+    y *= -1
+    variants = [
+        "",
+        "1) нормальное положение, когда угол а составляет от +30° до +69°",
+        "2) вертикальное положение - угол а от +70° до +90°",
+        "3) горизонтальное - угол а от 0° до +29°",
+        "4) отклонение оси вправо - угол а от +91° до +180°",
+        "5) отклонение оси влево - угол а от 0° до -90°",
+        "6) угол а от -180° до -91°"
+    ]
+
+    if x > 10 or x < -10 or y < -10 or y > 10:
+        return variants[0]
+    elif 0 >= y > -1.75 * x:
+        return variants[1]
+    elif x >= 0 and y < -1.75 * x:
+        return variants[2]
+    elif 0 < y < 0.5 * x:
+        return variants[3]
+    elif x < 0 and y < 0.5 * x:
+        return variants[4]
+    elif x >= 0 and y >= 0.5 * x:
+        return variants[5]
+    else:
+        return variants[6]

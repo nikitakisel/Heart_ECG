@@ -46,13 +46,13 @@ def find_small_scale(image_path):
             # aspect_ratio = float(w) / h
             # print(np.ndarray.tolist(approx))
             # Draw bounding box
-            # cv2.drawContours(original_image, [approx], -1, (0, 255, 0), 3)
+            # cv2.drawContours(input_image, [approx], -1, (0, 255, 0), 3)
 
     axis_variants = list(set(axis_variants))
     axis_variants.sort()
 
     # Display the result
-    # cv2.imshow("Detected Rectangles", original_image)
+    # cv2.imshow("Detected Rectangles", input_image)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
