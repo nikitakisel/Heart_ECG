@@ -12,6 +12,12 @@ class AnalysisAbstractModel(TimestampedAbstractModel):
         verbose_name='пользователь',
     )
     name = models.CharField('название', max_length=200)
+    disease_code = models.CharField(
+        'код заболевания (по МКБ-10)',
+        max_length=10,
+        null=True,
+        blank=True,
+    )
     slug = models.CharField(
         max_length=32,
         db_index=True,

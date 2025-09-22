@@ -6,9 +6,19 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(config => {
   const tokens = JSON.parse(localStorage.getItem('tokens'));
-  console.log(tokens)
   if (tokens && tokens.access) {
     config.headers['Authorization'] = `Bearer ${tokens.access}`;
+  }
+  // Only set JSON content-type when not sending FormData and when not already defined
+  const isFormData = typeof FormData !== 'undefined' && config.data instanceof FormData;
+  if (isFormData) {
+    // Let the browser set the correct multipart/form-data boundary
+    if (config.headers && config.headers['Content-Type']) {
+      delete config.headers['Content-Type'];
+    }
+  } else if (!config.headers || !config.headers['Content-Type']) {
+    config.headers = config.headers || {};
+    config.headers['Content-Type'] = 'application/json';
   }
   return config;
 }, error => {
@@ -39,7 +49,9 @@ apiClient.interceptors.response.use(response => {
         return apiClient(originalRequest);
       } catch (refreshError) {
         console.error('Unable to refresh token:', refreshError);
-        this.$router.push('/login');
+        try { localStorage.removeItem('tokens'); } catch (_) {}
+        // cannot use this.$router here; return a rejected promise with a marker so caller can redirect
+        error.isAuthFailed = true;
       }
     }
   }

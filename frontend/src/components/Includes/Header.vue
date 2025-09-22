@@ -1,22 +1,24 @@
 <template>
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-      <img src="../../assets/logo_ecg.svg">
-      <p></p>
-    </a>
+  <header class="app-header">
+    <div class="container app-header__inner">
+      <router-link to="/" class="brand" aria-label="На главную">
+        <img class="brand__logo" src="../../assets/logo_ecg.svg" alt="ECG">
+      </router-link>
 
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="/" class="nav-link px-2 link-dark">Начать анализ</a></li>
-      <li><a href="/analysis" class="nav-link px-2 link-dark">Список анализов</a></li>
-    </ul>
+      <nav class="app-nav" aria-label="Основная навигация">
+        <router-link to="/" class="app-nav__link">Начать анализ</router-link>
+        <router-link to="/analysis" class="app-nav__link">Список анализов</router-link>
+      </nav>
 
-    <div class="col-md-3 text-end">
-      <button v-if="!isLoggedIn" @click="goLogin" type="button" class="btn btn-outline-danger me-2">Войти</button>
-      <button v-if="!isLoggedIn" @click="goRegister" type="button" class="btn btn-danger">Зарегистрироваться</button>
-      <button v-if="isLoggedIn" @click="goLogout" type="button" class="btn btn-outline-secondary me-2">Выйти</button>
-      <button v-if="isLoggedIn" @click="goProfile" type="button" class="btn btn-danger">Профиль</button>
+      <div class="actions">
+        <button v-if="!isLoggedIn" @click="goLogin" type="button" class="btn btn-outline-danger">Войти</button>
+        <button v-if="!isLoggedIn" @click="goRegister" type="button" class="btn btn-danger">Зарегистрироваться</button>
+        <button v-if="isLoggedIn" @click="goLogout" type="button" class="btn btn-outline-secondary">Выйти</button>
+        <button v-if="isLoggedIn" @click="goProfile" type="button" class="btn btn-danger">Профиль</button>
+      </div>
     </div>
   </header>
+  <div class="header-spacer" aria-hidden="true"></div>
 </template>
 
 <script>
@@ -30,7 +32,14 @@ export default {
   },
 
   mounted() {
-    this.checkRefreshToken();
+    this.checkAuth();
+  },
+
+  watch: {
+    // react to route changes to update header state
+    $route() {
+      this.checkAuth();
+    }
   },
 
   methods: {
@@ -47,37 +56,48 @@ export default {
       this.$router.push('/logout');
     },
 
-    async checkRefreshToken() {
+    goProfile() {
       const tokens = JSON.parse(localStorage.getItem('tokens'));
+      if (!tokens) {
+        this.$router.push({ path: '/login', query: { redirect: '/profile' } });
+        return;
+      }
+      this.$router.push('/profile');
+    },
 
-      if (tokens && tokens.refresh) {
+    async checkAuth() {
+      const tokensRaw = localStorage.getItem('tokens');
+      if (!tokensRaw) { this.isLoggedIn = false; return; }
+      const tokens = JSON.parse(tokensRaw);
+      try {
+        await axios.post('http://localhost:8000/api/auth/token/verify/', { token: tokens.access });
+        this.isLoggedIn = true;
+      } catch (e) {
         try {
-          const response = await axios.post('http://localhost:8000/api/auth/token/verify/', {
-            token: tokens.refresh,
-          });
-
-          if (response.status === 200) {
-            this.isLoggedIn = true; // Устанавливаем статус входа
-          }
-        } catch (error) {
-          console.log(error)
-          if (error.response && error.response.status === 401) {
-            this.isLoggedIn = false;
-          } else {
-            console.error('Ошибка при проверке токена:', error);
-          }
+          const resp = await axios.post('http://localhost:8000/api/auth/token/refresh/', { refresh: tokens.refresh });
+          const newTokens = { refresh: resp.data.refresh, access: resp.data.access };
+          localStorage.setItem('tokens', JSON.stringify(newTokens));
+          this.isLoggedIn = true;
+        } catch (e2) {
+          localStorage.removeItem('tokens');
+          this.isLoggedIn = false;
         }
-      } else {
-        this.isLoggedIn = false;
       }
     },
   }
 }
 </script>
 
-<style>
-header {
-  padding-left: 10px;
-  padding-right: 10px;
+<style scoped>
+.brand { display:flex; align-items:center; text-decoration: none; }
+.brand__logo { height: 28px; width: auto; display:block; }
+.app-nav__link { color: var(--color-text-strong); text-decoration: none; padding:8px 10px; border-radius:8px; }
+.app-nav__link[aria-current="page"], .app-nav__link:hover { color:#fff; background: var(--color-primary); }
+.actions { display:flex; align-items:center; gap: 8px; }
+.header-spacer { height: 64px; }
+@media (max-width: 768px) {
+  .brand__logo { height: 24px; }
+  .actions { gap: 6px; }
+  .header-spacer { height: 56px; }
 }
 </style>

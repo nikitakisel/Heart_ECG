@@ -8,7 +8,7 @@
       <div class="form-group">
         <input class="form-control" type="email" v-model="formData.username" placeholder="Электронная почта " required/>
       </div>
-      <div class="password-container" style="display: flex; flex-direction: row;">
+      <div class="password-container" style="display: flex; flex-direction: row; gap:8px;">
         <input 
           class="form-control" 
           v-model="formData.password" 
@@ -22,7 +22,7 @@
         </button>
       </div>
       <div class="form-group">
-        <button type="submit" class="button-login btn btn-danger">Войти</button>
+        <button type="submit" class="button-login btn btn-danger" style="width:100%">Войти</button>
       </div>
       <p>Нет аккаунта? <a href="/register" style="color: #0089ff;">Зарегистрироваться</a></p>
     </form>

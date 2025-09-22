@@ -101,8 +101,37 @@ class PacienteProfile(Profile):
         verbose_name = 'профиль пациента'
         verbose_name_plural = 'профили пациентов'
 
+    height = models.PositiveIntegerField(
+        'рост',
+        null=True,
+        blank=True,
+    )
     weight = models.PositiveIntegerField(
         'вес',
+        null=True,
+        blank=True,
+    )
+    passport_series = models.CharField(
+        'серия паспорта',
+        max_length=4,
+        null=True,
+        blank=True,
+    )
+    passport_number = models.CharField(
+        'номер паспорта',
+        max_length=6,
+        null=True,
+        blank=True,
+    )
+    registration = models.CharField(
+        'прописка (по паспорту)',
+        max_length=300,
+        null=True,
+        blank=True,
+    )
+    cmi_policy = models.CharField(
+        'полис ОМС',
+        max_length=20,
         null=True,
         blank=True,
     )

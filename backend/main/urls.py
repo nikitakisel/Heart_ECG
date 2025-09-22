@@ -9,10 +9,12 @@ from rest_framework_simplejwt.views import TokenVerifyView
 
 from analysis.views import ECGAnalysisViewSet
 from user.views import RegisterView
+from user.views import UserProfileViewSet
 
 router = SimpleRouter()
 
 router.register(r'analysis', ECGAnalysisViewSet, basename='analysis')
+router.register(r'profile', UserProfileViewSet, basename='profile')
 
 api_namespace = router.urls
 api_namespace += [

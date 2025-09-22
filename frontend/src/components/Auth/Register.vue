@@ -18,6 +18,10 @@
       <div class="form-group">
         <input class="form-control" type="email" v-model="formData.email" placeholder="Электропочта" required/>
       </div>
+      <div class="form-group" v-if="!formData.is_staff">
+        <input class="form-control" v-model="formData.passport_series" placeholder="Серия паспорта" maxlength="4"/>
+        <input class="form-control" v-model="formData.passport_number" placeholder="Номер паспорта" maxlength="6"/>
+      </div>
       <div class="form-group">
         <div class="password-container" style="display: flex; flex-direction: row; width: 100%;">
           <input 
@@ -46,10 +50,10 @@
       </div>
       <div v-if="formData.is_staff">
         <div class="form-group">
-          <input class="form-control" v-model="formData.hospitalName" placeholder="Название ЛПУ" />
+          <input class="form-control" v-model="formData.institution" placeholder="Название ЛПУ" />
         </div>
         <div class="form-group">
-          <input class="form-control" v-model="formData.departmentName" placeholder="Название подразделения" />
+          <input class="form-control" v-model="formData.subdivision" placeholder="Название подразделения" />
         </div>
       </div>
       <div class="form-group" v-if="formData.is_staff">
@@ -84,6 +88,8 @@ export default {
           institution: null,
           subdivision: null,
           role: null,
+          passport_series: null,
+          passport_number: null,
         },
         showPassword: false,
       }
