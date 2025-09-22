@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
+from analysis.models import ECGAnalysis
+from medical_institutions.models import MedicalInstitution
 from user.models import User
 from user.models import PacienteProfile
-from analysis.models import ECGAnalysis
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,7 +20,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    institution = serializers.CharField(required=False, allow_null=True)
+    institution = serializers.PrimaryKeyRelatedField(
+        queryset=MedicalInstitution.objects.all(),
+        required=False,
+        allow_null=True,
+    )
     subdivision = serializers.CharField(required=False, allow_null=True)
     role = serializers.CharField(required=False, allow_null=True)
     password = serializers.CharField(write_only=True)

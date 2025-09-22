@@ -50,7 +50,16 @@
       </div>
       <div v-if="formData.is_staff">
         <div class="form-group">
-          <input class="form-control" v-model="formData.institution" placeholder="Название ЛПУ" />
+          <select class="form-select" v-model="formData.institution" required>
+            <option value="" disabled selected>Выберите медицинское учреждение</option>
+            <option 
+              v-for="institution in medicalInstitutions" 
+              :key="institution.id" 
+              :value="institution.id"
+            >
+              {{ institution.name }} - {{ institution.address }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <input class="form-control" v-model="formData.subdivision" placeholder="Название подразделения" />
@@ -64,7 +73,7 @@
         </select>
       </div>
       <div class="form-group">
-        <button type="submit" class="button-login btn btn-danger">Войти</button>
+        <button type="submit" class="button-login btn btn-danger">Зарегистрироваться</button>
       </div>
     </form>
   </div>
@@ -77,33 +86,60 @@ import apiClient from '@/apiClient';
 export default {
   data() {
     return {
-        formData : {
-          username: null,
-          email: null,
-          first_name: null,
-          last_name: null,
-          patronymic: null,
-          password: null,
-          is_staff: false,
-          institution: null,
-          subdivision: null,
-          role: null,
-          passport_series: null,
-          passport_number: null,
-        },
-        showPassword: false,
-      }
+      formData: {
+        username: null,
+        email: null,
+        first_name: null,
+        last_name: null,
+        patronymic: null,
+        password: null,
+        is_staff: false,
+        institution: null,
+        subdivision: null,
+        role: null,
+        passport_series: null,
+        passport_number: null,
+      },
+      medicalInstitutions: [],
+      showPassword: false,
+      loading: false,
+    }
   },
   components: {
     Header
+  },
+  mounted() {
+    this.loadMedicalInstitutions();
   },
   methods: {
     goMenu() {
       this.$router.push('/');
     },
 
+    async loadMedicalInstitutions() {
+      try {
+        this.loading = true;
+        const response = await apiClient.get('http://localhost:8000/api/medical-institutions/');
+        this.medicalInstitutions = response.data.results || response.data;
+      } catch (error) {
+        console.error('Ошибка загрузки медицинских учреждений:', error);
+        alert("Ошибка загрузки списка медицинских учреждений");
+      } finally {
+        this.loading = false;
+      }
+    },
+
     submitData() {
-      apiClient.post('http://localhost:8000/api/auth/register/', this.formData)
+      const submitData = {
+        ...this.formData,
+        ...(!this.formData.is_staff && {
+          institution: null,
+          subdivision: null,
+          role: null
+        })
+      };
+
+      apiClient.post('http://localhost:8000/api/auth/register/', submitData)
       .then(response => {
         const tokens = {
           refresh: response.data.refresh,
@@ -113,7 +149,8 @@ export default {
         this.goMenu();
       })
       .catch(error => {
-        alert("Ошибка ввода данных");
+        console.error('Ошибка регистрации:', error);
+        alert("Ошибка ввода данных: " + (error.response?.data?.message || error.message));
       });
     },
 
@@ -149,5 +186,10 @@ export default {
   text-align: left;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
 }
 </style>

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     # custom apps
     'analysis.apps.AnalysisConfig',
+    'medical_institutions.apps.MedicalInstitutionsConfig',
     'user.apps.UserConfig',
 ]
 
@@ -170,7 +171,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:1337',
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 

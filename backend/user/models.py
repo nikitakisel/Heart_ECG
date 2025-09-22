@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from medical_institutions.models import MedicalInstitution
 from user.managers import UserProfileManager
 
 
@@ -236,17 +237,20 @@ class PacienteProfile(Profile):
         default=False,
     )
 
+    def __str__(self) -> str:
+        return f'Профиль пациента #{self.id}'
+
 
 class PersonalProfile(Profile):
     class Meta:
         verbose_name = 'профиль персонала'
         verbose_name_plural = 'профили персонала'
 
-    institution = models.CharField(
-        'ЛПУ',
-        max_length=150,
-        null=True,
-        blank=True,
+    institution = models.ForeignKey(
+        MedicalInstitution,
+        on_delete=models.CASCADE,
+        verbose_name='медицинское учреждение',
+        related_name='personal',
     )
     subdivision = models.CharField(
         'подразделение',
@@ -254,3 +258,6 @@ class PersonalProfile(Profile):
         null=True,
         blank=True,
     )
+
+    def __str__(self) -> str:
+        return f'Профиль персонала #{self.id}'

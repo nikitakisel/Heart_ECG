@@ -8,6 +8,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.views import TokenVerifyView
 
 from analysis.views import ECGAnalysisViewSet
+from medical_institutions.views import MedicalInstitutionViewSet
 from user.views import RegisterView
 from user.views import UserProfileViewSet
 
@@ -15,6 +16,11 @@ router = SimpleRouter()
 
 router.register(r'analysis', ECGAnalysisViewSet, basename='analysis')
 router.register(r'profile', UserProfileViewSet, basename='profile')
+router.register(
+    r'medical-institutions',
+    MedicalInstitutionViewSet,
+    basename='medical_institutions',
+)
 
 api_namespace = router.urls
 api_namespace += [
