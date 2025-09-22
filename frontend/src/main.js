@@ -13,6 +13,7 @@ import ImageUploader from './components/Analysis/ImageUploader.vue'
 import Analysis from './components/Analysis/Analysis.vue'
 import AnalysisList from './components/Analysis/AnalysisList.vue'
 import UserProfile from './components/User/Profile.vue'
+import PrivacyPolicy from './components/PrivacyPolicy/PrivacyPolicy.vue'
 
 const router = createRouter({
     routes: [
@@ -58,6 +59,13 @@ const router = createRouter({
             path: '/analysis/:slug',
             component: Analysis,
             meta: { requiresAuth: true },
+        },
+        {
+            path: '/privacy-policy',
+            component: PrivacyPolicy,
+            meta: {
+                title: 'Согласие на обработку персональных данных',
+            },
         },
     ],
     history: createWebHistory()

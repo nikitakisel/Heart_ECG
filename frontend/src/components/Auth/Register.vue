@@ -72,8 +72,30 @@
           <option value="nurse">Средний мед. персонал</option>
         </select>
       </div>
+      <div class="form-check consent-checkbox">
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          v-model="consentGiven" 
+          id="consentCheck" 
+          required
+        >
+        <label class="form-check-label" for="consentCheck">
+          Я согласен(а) на обработку моих персональных данных и ознакомлен(а) с 
+          <router-link to="/privacy-policy" target="_blank" class="consent-link">
+            Соглашением об обработке персональных данных
+          </router-link>.
+        </label>
+      </div>
       <div class="form-group">
-        <button type="submit" class="button-login btn btn-danger">Зарегистрироваться</button>
+        <button 
+          type="submit" 
+          class="button-login btn btn-danger"
+          :disabled="!consentGiven || loading"
+        >
+          <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          {{ loading ? 'Регистрация...' : 'Зарегистрироваться' }}
+        </button>
       </div>
     </form>
   </div>
@@ -103,6 +125,7 @@ export default {
       medicalInstitutions: [],
       showPassword: false,
       loading: false,
+      consentGiven: true,
     }
   },
   components: {
@@ -130,6 +153,11 @@ export default {
     },
 
     submitData() {
+      if (!this.consentGiven) {
+        alert("Для регистрации необходимо дать согласие на обработку персональных данных");
+        return;
+      }
+
       const submitData = {
         ...this.formData,
         ...(!this.formData.is_staff && {
