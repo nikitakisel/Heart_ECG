@@ -86,14 +86,24 @@ def second_section():
     )
 
     # draw establish points
-    for item in establish_points:
+    for i in range(len(establish_points)):
         cv2.circle(
             result,
-            (item[0], item[1]),
+            (establish_points[i][0], establish_points[i][1]),
             radius=3,
             color=(0, 120, 255),
             thickness=-1,
         )
+        if i % 6 == 3:
+            cv2.putText(
+                result,
+                'J',
+                (establish_points[i][0] - 5, establish_points[i][1] - 10),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (0, 120, 255),
+                2,
+            )
 
     # show minimums and maximums
     minimum_letters = ['Q', 'S']

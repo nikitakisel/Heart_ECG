@@ -24,6 +24,47 @@ def find_extremes(array):
     return minimums, maximums
 
 
+def find_extremes_efd(array, delta_count):
+    deltas = [0] + [
+        array[i][1] - array[i + 1][1] for i in range(len(array) - 1)
+    ]
+    start = 0
+    while deltas[start] == 0:
+        start += 1
+
+    minimums = []
+    maximums = []
+    potential_extreme = None
+    direction_stability_count = 0
+    growth = True if deltas[start] > 0 else False
+
+    for i in range(start + 1, len(deltas)):
+        direction_stability_count += 1
+
+        if deltas[i] > 0 and not growth:
+            if direction_stability_count >= delta_count:
+                minimums.append(array[i - 1])
+                if potential_extreme:
+                    maximums.append(potential_extreme)
+                potential_extreme = array[i - 1]
+            else:
+                potential_extreme = None
+
+            growth = True
+            direction_stability_count = 0
+
+        elif deltas[i] < 0 and growth:
+            # if direction_stability_count >= delta_count:
+            #     maximums.append(array[i - 1])
+            # else:
+            #     potential_extreme = None
+
+            growth = False
+            direction_stability_count = 0
+
+    return minimums, maximums
+
+
 def find_establish_points(array, min_distance):
     deltas = [0] + [
         array[i][1] - array[i + 1][1] for i in range(len(array) - 1)
